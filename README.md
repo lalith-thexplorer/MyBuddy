@@ -138,37 +138,21 @@ streamlit run app.py
 Here’s the organized structure of **MyBuddy**:
 
 MyBuddy/
-├── .streamlit/
-│ ├── config.toml # App theme and layout configuration
-│ └── secrets.toml # API keys (Keep this private!)
-│
-├── app.py # Main Streamlit application & navigation
-├── utils.py # Helper functions and API utilities
-│
-├── explain_tab.py # "Explain Concepts" feature
-├── summarize_tab.py # "Summarize Notes" feature
-├── quiz_tab.py # "Test Yourself" quizzes feature
-├── flashcard_tab.py # "Remember Forever" flashcards feature
-│
-├── requirements.txt # Python dependencies
-├── README.md # Project documentation (this file)
-└── .gitignore # Files and folders to ignore in Git
-
----
-
-## 🛠️ Tech Stack
-
-<div align="center">
-
-| Technology | Purpose |
-|:----------:|---------|
-| **Streamlit** | Interactive web framework |
-| **Google Gemini 2.5 Flash** | AI model for content generation |
-| **Python 3.9+** | Backend language |
-| **pdfplumber** | PDF text extraction |
-| **Requests** | HTTP client for API calls |
-
-</div>
+- ├── .streamlit/
+- │ ├── config.toml # App theme and layout configuration
+- │ └── secrets.toml # API keys (Keep this private!)
+- │
+- ├── app.py # Main Streamlit application & navigation
+- ├── utils.py # Helper functions and API utilities
+- │
+- ├── explain_tab.py # "Explain Concepts" feature
+- ├── summarize_tab.py # "Summarize Notes" feature
+- ├── quiz_tab.py # "Test Yourself" quizzes feature
+- ├── flashcard_tab.py # "Remember Forever" flashcards feature
+- │
+- ├── requirements.txt # Python dependencies
+- ├── README.md # Project documentation (this file)
+- └── .gitignore # Files and folders to ignore in Git
 
 ---
 
@@ -281,5 +265,88 @@ git push origin feature/AmazingFeature
 5. Open a pull Request on the original repository 
 Thank you for making MyBuddy even better!
 
+---
+
+## 📝 License
+
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.  
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+**Lalith - The Explorer**
+
+[![GitHub](https://img.shields.io/badge/GitHub-lalith--thexplorer-181717?style=for-the-badge&logo=github)](https://github.com/lalith-thexplorer)  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/yourprofile)
+
+*Made with ❤️ for students who want to learn better*
+
+</div>
+
+---
+
+## 🙏 Acknowledgments
+
+- [Streamlit](https://streamlit.io) — amazing web framework  
+- [Google AI](https://ai.google.dev) — Gemini API for content generation  
+- All students who inspired this project  
+- The open-source community for guidance and support  
+
+---
+
+## 📊 Project Status
+
+<div align="center">
+
+🟢 **Active Development**
+
+### 🗺️ Roadmap
+- [ ] User authentication & profiles  
+- [ ] Study session tracking & analytics  
+- [ ] Spaced repetition system  
+- [ ] Mobile app version  
+- [ ] Collaborative study rooms  
+- [ ] Export to Anki flashcards  
+- [ ] Voice-to-text note input  
+- [ ] Dark/Light theme toggle  
+
+</div>
+
+---
+
+## 💡 Pro Tips
+
+- **Best Results**: Be specific with your topics  
+- **Explain Feature**: Start with "Basic" if new to a concept  
+- **Summarize**: Works best with structured text (PDFs, articles)  
+- **Quiz**: Use "Intermediate" for most exam prep  
+- **Flashcards**: Review regularly for best retention  
+
+---
+
+## 📞 Support
+
+Having issues or suggestions? Reach out:  
+
+- 🐛 [Report Bug](https://github.com/lalith-thexplorer/MyBuddy/issues)  
+- ✨ [Request Feature](https://github.com/lalith-thexplorer/MyBuddy/issues)  
+- 💬 [Ask Question](https://github.com/lalith-thexplorer/MyBuddy/discussions)  
+
+---
+
+<div align="center">
+
+### ⭐ Star this repo if MyBuddy helped you study smarter!
+
+**Happy Learning! 📚✨**  
+
+*"The beautiful thing about learning is that no one can take it away from you."*  
+
+**MyBuddy** © 2025 • Made with 💛 by [Lalith](https://github.com/lalith-thexplorer)
+
+</div>
 
 
