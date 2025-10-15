@@ -228,7 +228,7 @@ Thank you for making MyBuddy even better!
 **Lalith - The Explorer**
 
 [![GitHub](https://img.shields.io/badge/GitHub-lalith--thexplorer-181717?style=for-the-badge&logo=github)](https://github.com/lalith-thexplorer)  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/yourprofile)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)]([https://linkedin.com/in/yourprofile](https://www.linkedin.com/in/lalithexplorer/))
 
 *Made with ❤️ for students who want to learn better*
 
