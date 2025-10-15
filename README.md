@@ -18,13 +18,6 @@
 
 **MyBuddy** is your all-in-one, AI-powered study companion built to help you **learn faster, understand deeper, and remember longer**.  
 It’s powered by **Google’s Gemini 2.5 Flash** — delivering lightning-fast intelligence packed into a sleek, zero-friction experience.
-
-<div align="center">
-
-### ⚡ Lightning Fast • 🎯 Personalized • 🎓 Study Anywhere • 🔓 Zero Friction
-
-</div>
-
 MyBuddy isn’t just another study tool — it’s your **personal tutor, note taker, quiz master, and memory coach**, all rolled into one.  
 Whether you’re breaking down complex concepts, summarizing long notes, or testing your knowledge, MyBuddy has your back.
 
@@ -85,7 +78,6 @@ Train your brain with AI-generated flashcards.
 </table>
 
 ---
----
 
 ## 🚀 Quick Start
 
@@ -95,8 +87,6 @@ Before you begin, make sure you have:
 
 - 🐍 **Python 3.9+** installed  
 - 🔑 A **Google Gemini API key** — [Get yours free](https://aistudio.google.com/apikey)  
-
----
 
 ### ⚙️ Installation
 
@@ -152,7 +142,6 @@ MyBuddy/
 ├── README.md # Project documentation (this file)
 └── .gitignore # Files and folders to ignore in Git
 ```
----
 
 ## 🛠️ Tech Stack
 
@@ -168,8 +157,6 @@ MyBuddy/
 
 </div>
 
----
----
 
 ## 📖 How to Use
 
@@ -180,7 +167,6 @@ MyBuddy/
 - Click **✨ Generate Explanation**  
 - Download or review your structured explanation  
 
----
 
 ### 2️⃣ Summarize Notes
 - Go to **⚡ Summarize Smart**  
@@ -204,8 +190,6 @@ MyBuddy/
 - Generate interactive flashcards  
 - Review regularly to boost memory retention  
 
----
----
 
 ## 🌟 Why MyBuddy?
 
@@ -222,25 +206,6 @@ MyBuddy/
 </div>
 
 ---
----
-
-## 🚢 Deployment
-
-### Deploy to Streamlit Cloud (Free & Easy)
-
-1. **Push your code to GitHub** ✅  
-2. Go to [share.streamlit.io](https://share.streamlit.io)  
-3. Click **"New app"**  
-4. Select your GitHub repository: `lalith-thexplorer/MyBuddy`  
-5. Set the main file path to: `app.py`  
-6. Add your secrets in **Advanced settings**:
-- GOOGLE_API_KEY = "your-api-key-here"
-7. Click **Deploy!** 🚀  
-Your app will be live at: `https://your-app-name.streamlit.app`  
-*Now anyone can access your AI study companion online!*  
----
----
-
 ## 🤝 Contributing
 
 Contributions make the open-source community amazing! Any help you provide is **greatly appreciated**.  
@@ -262,14 +227,6 @@ git push origin feature/AmazingFeature
 ```
 5. Open a pull Request on the original repository 
 Thank you for making MyBuddy even better!
-
----
-
-## 📝 License
-
-This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.  
-
----
 
 ## 👨‍💻 Author
 
@@ -293,16 +250,6 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 - **Summarize**: Works best with structured text (PDFs, articles)  
 - **Quiz**: Use "Intermediate" for most exam prep  
 - **Flashcards**: Review regularly for best retention  
-
----
-
-## 📞 Support
-
-Having issues or suggestions? Reach out:  
-
-- 🐛 [Report Bug](https://github.com/lalith-thexplorer/MyBuddy/issues)  
-- ✨ [Request Feature](https://github.com/lalith-thexplorer/MyBuddy/issues)  
-- 💬 [Ask Question](https://github.com/lalith-thexplorer/MyBuddy/discussions)  
 
 ---
 
