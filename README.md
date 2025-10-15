@@ -10,8 +10,6 @@
 **Transform the way you study with AI-powered learning tools.**  
 *Learning isn’t about working harder — it’s about working smarter.*
 
-[🚀 Live Demo](#) • [📖 Documentation](#features) • [🐛 Report Bug](https://github.com/lalith-thexplorer/MyBuddy/issues) • [✨ Request Feature](https://github.com/lalith-thexplorer/MyBuddy/issues)
-
 </div>
 
 ---
@@ -136,24 +134,24 @@ streamlit run app.py
 ## 📁 Project Structure
 
 Here’s the organized structure of **MyBuddy**:
-
+```
 MyBuddy/
-- ├── .streamlit/
-- │ ├── config.toml # App theme and layout configuration
-- │ └── secrets.toml # API keys (Keep this private!)
-- │
-- ├── app.py # Main Streamlit application & navigation
-- ├── utils.py # Helper functions and API utilities
-- │
-- ├── explain_tab.py # "Explain Concepts" feature
-- ├── summarize_tab.py # "Summarize Notes" feature
-- ├── quiz_tab.py # "Test Yourself" quizzes feature
-- ├── flashcard_tab.py # "Remember Forever" flashcards feature
-- │
-- ├── requirements.txt # Python dependencies
-- ├── README.md # Project documentation (this file)
-- └── .gitignore # Files and folders to ignore in Git
-
+├── .streamlit/
+│ ├── config.toml # App theme and layout configuration
+│ └── secrets.toml # API keys (Keep this private!)
+│
+├── app.py # Main Streamlit application & navigation
+├── utils.py # Helper functions and API utilities
+│
+├── explain_tab.py # "Explain Concepts" feature
+├── summarize_tab.py # "Summarize Notes" feature
+├── quiz_tab.py # "Test Yourself" quizzes feature
+├── flashcard_tab.py # "Remember Forever" flashcards feature
+│
+├── requirements.txt # Python dependencies
+├── README.md # Project documentation (this file)
+└── .gitignore # Files and folders to ignore in Git
+```
 ---
 
 ## 🛠️ Tech Stack
@@ -283,35 +281,6 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/yourprofile)
 
 *Made with ❤️ for students who want to learn better*
-
-</div>
-
----
-
-## 🙏 Acknowledgments
-
-- [Streamlit](https://streamlit.io) — amazing web framework  
-- [Google AI](https://ai.google.dev) — Gemini API for content generation  
-- All students who inspired this project  
-- The open-source community for guidance and support  
-
----
-
-## 📊 Project Status
-
-<div align="center">
-
-🟢 **Active Development**
-
-### 🗺️ Roadmap
-- [ ] User authentication & profiles  
-- [ ] Study session tracking & analytics  
-- [ ] Spaced repetition system  
-- [ ] Mobile app version  
-- [ ] Collaborative study rooms  
-- [ ] Export to Anki flashcards  
-- [ ] Voice-to-text note input  
-- [ ] Dark/Light theme toggle  
 
 </div>
 
