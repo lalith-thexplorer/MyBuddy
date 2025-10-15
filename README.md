@@ -21,8 +21,6 @@ It’s powered by **Google’s Gemini 2.5 Flash** — delivering lightning-fast 
 MyBuddy isn’t just another study tool — it’s your **personal tutor, note taker, quiz master, and memory coach**, all rolled into one.  
 Whether you’re breaking down complex concepts, summarizing long notes, or testing your knowledge, MyBuddy has your back.
 
----
----
 
 ## ✨ Features
 
@@ -77,7 +75,6 @@ Train your brain with AI-generated flashcards.
 </tr>
 </table>
 
----
 
 ## 🚀 Quick Start
 
@@ -119,7 +116,6 @@ After running the command below 👇
 streamlit run app.py
 ```
 
----
 
 ## 📁 Project Structure
 
@@ -174,7 +170,6 @@ MyBuddy/
 - Choose the desired summary length  
 - Get key insights instantly  
 
----
 
 ### 3️⃣ Take a Quiz
 - Open **🎯 Test Yourself**  
@@ -182,7 +177,6 @@ MyBuddy/
 - Answer AI-generated multiple-choice questions  
 - Receive instant feedback with explanations  
 
----
 
 ### 4️⃣ Create Flashcards
 - Open **🧠 Remember Forever**  
@@ -205,7 +199,6 @@ MyBuddy/
 
 </div>
 
----
 ## 🤝 Contributing
 
 Contributions make the open-source community amazing! Any help you provide is **greatly appreciated**.  
@@ -241,7 +234,6 @@ Thank you for making MyBuddy even better!
 
 </div>
 
----
 
 ## 💡 Pro Tips
 
