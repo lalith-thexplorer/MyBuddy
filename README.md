@@ -17,8 +17,8 @@
 ## 🎯 What is MyBuddy?
 
 **MyBuddy** is your all-in-one, AI-powered study companion built to help you **learn faster, understand deeper, and remember longer**.  
-It’s powered by **Google’s Gemini 2.5 Flash** — delivering lightning-fast intelligence packed into a sleek, zero-friction experience.
-MyBuddy isn’t just another study tool — it’s your **personal tutor, note taker, quiz master, and memory coach**, all rolled into one.  
+It’s powered by **Google’s Gemini 2.5 Flash** delivering lightning-fast intelligence packed into a sleek, zero-friction experience.
+MyBuddy isn’t just another study tool it’s your **personal tutor, note taker, quiz master, and memory coach**, all rolled into one.  
 Whether you’re breaking down complex concepts, summarizing long notes, or testing your knowledge, MyBuddy has your back.
 
 
@@ -88,28 +88,28 @@ Before you begin, make sure you have:
 ### ⚙️ Installation
 
 
-# 1. Clone the repository
+- 1. Clone the repository
 ```bash
 git clone https://github.com/lalith-thexplorer/MyBuddy.git
 cd MyBuddy
 ```
 
-# 2. Install dependencies
+- 2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-# 3. Add your API key
+- 3. Add your API key
 ```bash
 # Create .streamlit/secrets.toml and paste:
 GOOGLE_API_KEY = "your-api-key-here"
 ```
 
-# 4. Run the app
+- 4. Run the app
 ```bash
 streamlit run app.py
 ```
-### 🌐 Access the App
+- 🌐 Access the App
 
 After running the command below 👇  
 ```bash
