@@ -87,29 +87,27 @@ Before you begin, make sure you have:
 
 ### ⚙️ Installation
 
-
-- 1. Clone the repository
+1.  Clone the repository
 ```bash
 git clone https://github.com/lalith-thexplorer/MyBuddy.git
 cd MyBuddy
 ```
 
-- 2. Install dependencies
+2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-- 3. Add your API key
+3. Add your API key
 ```bash
 # Create .streamlit/secrets.toml and paste:
 GOOGLE_API_KEY = "your-api-key-here"
 ```
-
-- 4. Run the app
+4. Run the app
 ```bash
 streamlit run app.py
 ```
-- 🌐 Access the App
+5. Access the App
 
 After running the command below 👇  
 ```bash
