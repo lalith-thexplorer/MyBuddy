@@ -1,0 +1,14 @@
+[theme]
+primaryColor = "#FFD700"  # Yellow accent
+backgroundColor = "#0E1117"  # Dark background
+secondaryBackgroundColor = "#1E1E1E"  # Card background
+textColor = "#FFFFFF"  # White text
+font = "sans serif"
+
+[server]
+maxUploadSize = 10  # Limit file uploads to 10MB
+enableXsrfProtection = true
+enableCORS = false
+
+[browser]
+gatherUsageStats = false
