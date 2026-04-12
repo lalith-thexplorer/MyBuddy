@@ -264,7 +264,7 @@ def generate_explanation():
             "topP": 0.9,
             "topK": 40
         },
-        "model": "gemini-2.5-flash-preview-05-20"
+        "model": "gemini-2.5-flash"
     }
     
     # Call API
@@ -370,6 +370,10 @@ def display_explanation_results():
         cleaned_output = re.sub(r'<strong>(.*?)</strong>', r'\1', cleaned_output)
         
         separator = '=' * 60
+
+        # Sanitize topic for a safe HTTP header filename.
+        safe_topic = re.sub(r"[^A-Za-z0-9_-]+", "_", st.session_state.explanation_topic.strip())
+        safe_topic = safe_topic.strip("_") or "topic"
         
         download_text = f"""Topic: {st.session_state.explanation_topic}
 Level: {st.session_state.explanation_level}
@@ -382,7 +386,7 @@ Level: {st.session_state.explanation_level}
         st.download_button(
             label="💾 Download Explanation",
             data=download_text,
-            file_name=f"explanation_{st.session_state.explanation_topic.replace(' ', '_')[:30]}.txt",
+            file_name=f"explanation_{safe_topic[:30]}.txt",
             mime="text/plain",
             use_container_width=True,
             key="download_explain_btn"

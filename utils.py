@@ -22,7 +22,8 @@ if not GEMINI_API_KEY:
     """)
     st.stop()
 
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent"
+GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 MAX_RETRIES = 5
 BASE_DELAY = 2
 
@@ -70,7 +71,13 @@ def generate_content_with_backoff(payload):
 
     for attempt in range(MAX_RETRIES):
         try:
-            response = requests.post(GEMINI_API_URL, headers=headers, params=params, data=json.dumps(payload))
+            response = requests.post(
+                GEMINI_API_URL,
+                headers=headers,
+                params=params,
+                data=json.dumps(payload),
+                timeout=60,
+            )
             response.raise_for_status() 
 
             result = response.json()
@@ -87,7 +94,11 @@ def generate_content_with_backoff(payload):
                 delay = BASE_DELAY * (2 ** attempt)
                 time.sleep(delay)
             else:
-                st.error("Max retries reached. API request failed.")
+                detail = ""
+                response = getattr(e, "response", None)
+                if response is not None:
+                    detail = f" (HTTP {response.status_code}: {response.text[:300]})"
+                st.error(f"Max retries reached. API request failed.{detail}")
                 return None
         except (json.JSONDecodeError, KeyError, IndexError) as e:
             st.error(f"Error processing API response: {e}")
@@ -109,7 +120,7 @@ def generate_structured_quiz(topic, difficulty, num_questions):
             "responseMimeType": "application/json",
             "responseSchema": QUIZ_SCHEMA
         },
-        "model": "gemini-2.5-flash-preview-05-20"
+        "model": "gemini-2.5-flash"
     }
 
     headers = {'Content-Type': 'application/json'}
@@ -117,7 +128,13 @@ def generate_structured_quiz(topic, difficulty, num_questions):
 
     for attempt in range(MAX_RETRIES):
         try:
-            response = requests.post(GEMINI_API_URL, headers=headers, params=params, data=json.dumps(payload))
+            response = requests.post(
+                GEMINI_API_URL,
+                headers=headers,
+                params=params,
+                data=json.dumps(payload),
+                timeout=60,
+            )
             response.raise_for_status()
             
             result = response.json()
@@ -130,6 +147,7 @@ def generate_structured_quiz(topic, difficulty, num_questions):
             if attempt < MAX_RETRIES - 1:
                 time.sleep(BASE_DELAY * (2 ** attempt))
             else:
+                st.error("Max retries reached. Quiz generation failed.")
                 return None
         except (json.JSONDecodeError, KeyError, IndexError) as e:
             st.error(f"Error parsing quiz data: {e}")
@@ -151,7 +169,7 @@ def generate_structured_flashcards(topic, num_cards):
             "responseMimeType": "application/json",
             "responseSchema": FLASHCARD_SCHEMA
         },
-        "model": "gemini-2.5-flash-preview-05-20"
+        "model": "gemini-2.5-flash"
     }
 
     headers = {'Content-Type': 'application/json'}
@@ -159,7 +177,13 @@ def generate_structured_flashcards(topic, num_cards):
 
     for attempt in range(MAX_RETRIES):
         try:
-            response = requests.post(GEMINI_API_URL, headers=headers, params=params, data=json.dumps(payload))
+            response = requests.post(
+                GEMINI_API_URL,
+                headers=headers,
+                params=params,
+                data=json.dumps(payload),
+                timeout=60,
+            )
             response.raise_for_status()
             
             result = response.json()
@@ -172,6 +196,7 @@ def generate_structured_flashcards(topic, num_cards):
             if attempt < MAX_RETRIES - 1:
                 time.sleep(BASE_DELAY * (2 ** attempt))
             else:
+                st.error("Max retries reached. Flashcard generation failed.")
                 return None
         except (json.JSONDecodeError, KeyError, IndexError) as e:
             st.error(f"Error parsing flashcard data: {e}")
@@ -183,23 +208,62 @@ def extract_text_from_file(uploaded_file):
     if uploaded_file is None:
         st.error("No file uploaded.")
         return None
+
+    # Ensure repeated attempts read from the beginning of the in-memory file.
+    try:
+        uploaded_file.seek(0)
+    except Exception:
+        pass
     
-    file_type = uploaded_file.type
+    file_type = (uploaded_file.type or "").lower()
+    file_name = (getattr(uploaded_file, "name", "") or "").lower()
+
+    # Some browsers/uploader flows return a generic MIME type.
+    if not file_type or file_type == "application/octet-stream":
+        if file_name.endswith(".pdf"):
+            file_type = "application/pdf"
+        elif file_name.endswith(".txt"):
+            file_type = "text/plain"
     
     if file_type == "text/plain":
         try:
-            return uploaded_file.getvalue().decode("utf-8")
+            raw_bytes = uploaded_file.getvalue()
+            try:
+                return raw_bytes.decode("utf-8")
+            except UnicodeDecodeError:
+                # Fallback for legacy encodings.
+                return raw_bytes.decode("latin-1")
         except Exception as e:
             st.error(f"Error reading text file: {e}")
             return None
         
     elif file_type == "application/pdf":
         try:
-            with pdfplumber.open(BytesIO(uploaded_file.read())) as pdf:
-                text = ""
+            file_bytes = uploaded_file.getvalue()
+            if not file_bytes:
+                st.error("Uploaded PDF appears to be empty.")
+                return None
+
+            with pdfplumber.open(BytesIO(file_bytes)) as pdf:
+                text_chunks = []
                 for page in pdf.pages[:10]:  # First 10 pages
-                    text += page.extract_text() or ""
-                return text.strip()
+                    page_text = page.extract_text() or ""
+
+                    # Fallback: reconstruct text from extracted words when line extraction fails.
+                    if not page_text.strip():
+                        words = page.extract_words() or []
+                        if words:
+                            page_text = " ".join(word.get("text", "") for word in words)
+
+                    if page_text and page_text.strip():
+                        text_chunks.append(page_text.strip())
+
+                text = "\n\n".join(text_chunks).strip()
+                if text:
+                    return text
+
+                st.error("No selectable text was found in the PDF. It may be a scanned/image-only PDF.")
+                return None
         except Exception as e:
             st.error(f"Error processing PDF: {e}")
             return None

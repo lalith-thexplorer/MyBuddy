@@ -180,6 +180,10 @@ def feature_summarize_notes():
         st.session_state.summary_style = "Bullet Points"
     if 'summary_generating' not in st.session_state:
         st.session_state.summary_generating = False
+    if 'summary_source_text' not in st.session_state:
+        st.session_state.summary_source_text = ""
+    if 'summary_uploader_key' not in st.session_state:
+        st.session_state.summary_uploader_key = 0
 
     # If showing results, display them
     if st.session_state.summary_output:
@@ -228,17 +232,23 @@ def feature_summarize_notes():
             type=["pdf", "txt"],
             help="Upload your notes to summarize. PDFs must be text-based, not scanned images.",
             label_visibility="visible",
-            key="file_uploader"
+            key=f"file_uploader_{st.session_state.summary_uploader_key}"
         )
         
         # Store uploaded file in session state
         if uploaded_file:
             st.session_state.uploaded_file = uploaded_file
-            # Show indicator that file is active
-            st.success(f"✅ File loaded: {uploaded_file.name}")
-        elif 'uploaded_file' in st.session_state and st.session_state.uploaded_file:
-            # File was uploaded previously
-            st.success(f"✅ File loaded: {st.session_state.uploaded_file.name}")
+
+        active_file = st.session_state.get('uploaded_file')
+        if active_file:
+            col_file, col_remove = st.columns([4, 1])
+            with col_file:
+                st.success(f"✅ File loaded: {active_file.name}")
+            with col_remove:
+                if st.button("🗑 Remove", key="remove_uploaded_file_btn", type="secondary", use_container_width=True):
+                    st.session_state.pop('uploaded_file', None)
+                    st.session_state.summary_uploader_key += 1
+                    st.rerun()
         
         st.markdown('<p style="text-align: center; color: #666666; margin: 0.3rem 0; font-size: 0.9rem;">── OR ──</p>', unsafe_allow_html=True)
         
@@ -258,6 +268,7 @@ def feature_summarize_notes():
             # Clear uploaded file if user starts typing
             if len(text_input.strip()) > 0 and st.session_state.get('uploaded_file'):
                 st.session_state.pop('uploaded_file', None)
+                st.session_state.summary_uploader_key += 1
                 st.info("ℹ️ File input cleared - using text input")
         
         # Show which input is active
@@ -327,21 +338,21 @@ def feature_summarize_notes():
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             if st.button("✨ Generate Summary", type="primary", use_container_width=True, key="gen_summary_btn"):
-                # Validate input - prioritize text over file
-                source_text = ""
-                
+                # Validate and prepare input before showing loading state.
+                prepared_text = ""
+
                 if text_input.strip():
-                    # Text takes priority
-                    source_text = text_input
+                    prepared_text = text_input.strip()
                 elif st.session_state.get('uploaded_file') or uploaded_file:
-                    # Use file if no text
-                    source_text = "file_uploaded"
-                
-                if not source_text:
+                    file_obj = st.session_state.get('uploaded_file') or uploaded_file
+                    prepared_text = extract_text_from_file(file_obj) or ""
+
+                if not prepared_text:
                     st.warning("⚠️ Please upload a file or paste text to summarize.")
-                elif source_text != "file_uploaded" and len(source_text.strip()) < 50:
+                elif len(prepared_text) < 50:
                     st.warning("⚠️ Text is too short to summarize. Please provide more content (at least 50 characters).")
                 else:
+                    st.session_state.summary_source_text = prepared_text
                     st.session_state.summary_generating = True
                     st.rerun()
         
@@ -351,19 +362,15 @@ def feature_summarize_notes():
 
 def generate_summary():
     """Actually performs the summary generation."""
-    source_text = ""
-    
-    # Get text source
-    if st.session_state.get('uploaded_file'):
-        source_text = extract_text_from_file(st.session_state.uploaded_file)
-        if source_text:
-            st.session_state.summary_input_text = ""
-    elif st.session_state.summary_input_text.strip():
-        source_text = st.session_state.summary_input_text
+    source_text = st.session_state.get('summary_source_text', "")
+
+    # Fallback safety path if button flow didn't prepare source text.
+    if not source_text and st.session_state.summary_input_text.strip():
+        source_text = st.session_state.summary_input_text.strip()
     
     if not source_text or len(source_text.strip()) < 50:
         st.session_state.summary_generating = False
-        st.rerun()
+        st.warning("Not enough readable content found to summarize (minimum ~50 characters).")
         return
     
     # Construct prompt with BETTER highlighting instruction
@@ -417,7 +424,7 @@ Notes to summarize:
             "topP": 0.8,
             "topK": 40
         },
-        "model": "gemini-2.5-flash-preview-05-20"
+        "model": "gemini-2.5-flash"
     }
     
     # Call API
@@ -427,6 +434,7 @@ Notes to summarize:
         st.session_state.summary_output = response_text
         st.session_state.original_text = source_text
     
+    st.session_state.summary_source_text = ""
     st.session_state.summary_generating = False
     st.rerun()
 
@@ -566,5 +574,6 @@ def display_summary_results():
             st.session_state.summary_output = None
             st.session_state.summary_input_text = ""
             st.session_state.pop('uploaded_file', None)
+            st.session_state.summary_uploader_key += 1
             st.session_state.pop('original_text', None)
             st.rerun()

@@ -250,11 +250,18 @@ def show_quiz_results():
     with col2:
         # Generate downloadable results
         results_text = generate_quiz_results_text(correct_count, total_questions, accuracy)
+
+        # Sanitize topic for a safe HTTP header filename.
+        raw_topic = str(st.session_state.quiz_topic).strip().replace("\n", " ").replace("\r", " ")
+        safe_topic = "_".join(raw_topic.split())
+        safe_topic = "".join(ch for ch in safe_topic if ch.isalnum() or ch in ("_", "-"))
+        if not safe_topic:
+            safe_topic = "topic"
         
         st.download_button(
             label="📥 Download Results",
             data=results_text,
-            file_name=f"quiz_results_{st.session_state.quiz_topic.replace(' ', '_')}.txt",
+            file_name=f"quiz_results_{safe_topic[:40]}.txt",
             mime="text/plain",
             use_container_width=True,
             key="download_results_btn"

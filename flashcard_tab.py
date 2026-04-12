@@ -7,43 +7,184 @@ def inject_flashcard_css():
     """Injects custom CSS for modern flashcard styling"""
     st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+    :root {
+        --deck-bg: rgba(15, 22, 34, 0.92);
+        --deck-bg-2: rgba(20, 30, 44, 0.96);
+        --deck-line: rgba(255, 255, 255, 0.08);
+    }
+
+    .stApp, .main, body {
+        background:
+            radial-gradient(circle at top left, rgba(255, 210, 74, 0.10), transparent 24%),
+            radial-gradient(circle at top right, rgba(103, 232, 208, 0.10), transparent 20%),
+            linear-gradient(180deg, #081018, #060b12) !important;
+    }
+
+    h1, h2, h3, h4, h5 {
+        font-family: 'Space Grotesk', sans-serif;
+        letter-spacing: -0.03em;
+    }
+
+    body, p, div, span, button, input, textarea, select {
+        font-family: 'Manrope', sans-serif;
+    }
+
     /* ALL Primary buttons - Yellow background with dark text */
     button[kind="primary"] {
-        background-color: #FFD700 !important;
-        color: #1A1A1A !important;
-        font-weight: 600 !important;
+        background: linear-gradient(135deg, #ffe17a, #ffbf2f) !important;
+        color: #111827 !important;
+        font-weight: 800 !important;
         border: none !important;
-        border-radius: 12px !important;
-        padding: 0.75rem 1.5rem !important;
-        font-size: 1.05rem !important;
-        transition: all 0.3s ease !important;
+        border-radius: 16px !important;
+        padding: 0.8rem 1.5rem !important;
+        font-size: 1.02rem !important;
+        transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease !important;
+        box-shadow: 0 18px 34px rgba(255, 191, 47, 0.22) !important;
     }
     
     button[kind="primary"]:hover {
-        background-color: #FFC700 !important;
-        color: #1A1A1A !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4) !important;
+        transform: translateY(-3px) scale(1.01) !important;
+        box-shadow: 0 26px 42px rgba(255, 191, 47, 0.32) !important;
+        filter: brightness(1.03) saturate(1.05) !important;
     }
     
     /* ALL Secondary buttons - Gray with NO yellow border by default */
     button[kind="secondary"] {
-        background: linear-gradient(135deg, #2A2A2A 0%, #1E1E1E 100%) !important;
+        background: linear-gradient(135deg, rgba(28, 38, 52, 0.96), rgba(16, 24, 36, 0.96)) !important;
         color: #FFFFFF !important;
-        border: 2px solid #404040 !important;
-        border-radius: 25px !important;
-        padding: 0.6rem 1.2rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.10) !important;
+        border-radius: 18px !important;
+        padding: 0.68rem 1.2rem !important;
         font-size: 1rem !important;
-        transition: all 0.3s ease !important;
+        transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease !important;
     }
     
     /* On hover - Yellow border and keep white text */
     button[kind="secondary"]:hover {
-        border-color: #FFD700 !important;
-        background: linear-gradient(135deg, #2A2A2A 0%, #1E1E1E 100%) !important;
+        border-color: rgba(255, 210, 74, 0.55) !important;
+        background: linear-gradient(135deg, rgba(28, 38, 52, 0.96), rgba(16, 24, 36, 0.96)) !important;
         color: #FFFFFF !important;
-        transform: scale(1.05) !important;
-        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25) !important;
+    }
+
+    .deck-shell {
+        perspective: 1800px;
+    }
+
+    .deck-card {
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 760ms cubic-bezier(0.2, 0.8, 0.15, 1), opacity 260ms ease, filter 260ms ease;
+        will-change: transform;
+    }
+
+    .deck-card.current-slide-next {
+        animation: deckEnterNext 720ms cubic-bezier(0.2, 0.8, 0.15, 1);
+    }
+
+    .deck-card.current-slide-prev {
+        animation: deckEnterPrev 720ms cubic-bezier(0.2, 0.8, 0.15, 1);
+    }
+
+    .deck-card.current-flip {
+        animation: deckFlipPulse 700ms cubic-bezier(0.2, 0.8, 0.15, 1);
+    }
+
+    .deck-card.side-peek-left {
+        transform: translateX(10px) rotateY(12deg) scale(0.90);
+        opacity: 0.42;
+        filter: blur(1px) saturate(0.8);
+    }
+
+    .deck-card.side-peek-right {
+        transform: translateX(-10px) rotateY(-12deg) scale(0.90);
+        opacity: 0.42;
+        filter: blur(1px) saturate(0.8);
+    }
+
+    .flip-shell {
+        position: relative;
+        width: 100%;
+        min-height: 380px;
+        perspective: 1800px;
+    }
+
+    .flip-inner {
+        position: relative;
+        width: 100%;
+        min-height: 380px;
+        transform-style: preserve-3d;
+        transition: transform 860ms cubic-bezier(0.2, 0.8, 0.15, 1);
+    }
+
+    .flip-inner.is-flipped {
+        transform: rotateY(180deg);
+    }
+
+    .flip-face {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        backface-visibility: hidden;
+        border-radius: 28px;
+        overflow: hidden;
+        border: 1px solid var(--deck-line);
+        background: linear-gradient(180deg, var(--deck-bg), var(--deck-bg-2));
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+    }
+
+    .flip-face::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 35%, transparent 65%, rgba(255, 255, 255, 0.04));
+        pointer-events: none;
+    }
+
+    .flip-face.back {
+        transform: rotateY(180deg);
+    }
+
+    .card-title-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        width: fit-content;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 210, 74, 0.10);
+        border: 1px solid rgba(255, 210, 74, 0.18);
+        color: #fff2b4;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .card-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    @keyframes deckEnterNext {
+        0% { opacity: 0; transform: translateX(28px) scale(0.96); }
+        100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    @keyframes deckEnterPrev {
+        0% { opacity: 0; transform: translateX(-28px) scale(0.96); }
+        100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    @keyframes deckFlipPulse {
+        0% { transform: scale(0.985); }
+        45% { transform: scale(1.015); }
+        100% { transform: scale(1); }
     }
     </style>
     """, unsafe_allow_html=True)
@@ -55,6 +196,7 @@ def next_card():
     """Moves to the next card, looping back to the beginning if at the end."""
     if st.session_state.flashcard_type == "Conceptual (Q/A Flip)":
         st.session_state.card_side = 'Q'
+    st.session_state.flashcard_motion = 'next'
     st.session_state.card_current_index = (st.session_state.card_current_index + 1) % len(st.session_state.flashcard_data)
 
 
@@ -63,11 +205,13 @@ def prev_card():
     num_cards = len(st.session_state.flashcard_data)
     if st.session_state.flashcard_type == "Conceptual (Q/A Flip)":
         st.session_state.card_side = 'Q'
+    st.session_state.flashcard_motion = 'prev'
     st.session_state.card_current_index = (st.session_state.card_current_index - 1 + num_cards) % num_cards
 
 
 def flip_card():
     """Toggles the card side from Question to Answer and vice versa."""
+    st.session_state.flashcard_motion = 'flip'
     st.session_state.card_side = 'A' if st.session_state.card_side == 'Q' else 'Q'
 
 
@@ -107,85 +251,26 @@ def display_flashcard_deck():
         st.session_state.last_card_index = 0
     if 'last_card_side' not in st.session_state:
         st.session_state.last_card_side = 'Q'
+    if 'flashcard_motion' not in st.session_state:
+        st.session_state.flashcard_motion = None
     
     # Determine slide direction
     going_forward = st.session_state.card_current_index > st.session_state.last_card_index
     flipping = st.session_state.card_current_index == st.session_state.last_card_index and st.session_state.card_side != st.session_state.last_card_side
+    motion = st.session_state.get('flashcard_motion')
     
     # Update tracking
     st.session_state.last_card_index = st.session_state.card_current_index
     st.session_state.last_card_side = st.session_state.card_side
-    
-    # Carousel CSS with responsive design
-    st.markdown("""
-    <style>
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(100px) scale(0.9);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-        }
-    }
-    
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-100px) scale(0.9);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-        }
-    }
-    
-    @keyframes flipIn {
-        from {
-            opacity: 0;
-            transform: rotateX(90deg);
-        }
-        to {
-            opacity: 1;
-            transform: rotateX(0deg);
-        }
-    }
-    
-    .carousel-slide-right {
-        animation: slideInRight 0.4s ease-out;
-    }
-    
-    .carousel-slide-left {
-        animation: slideInLeft 0.4s ease-out;
-    }
-    
-    .carousel-flip {
-        animation: flipIn 0.5s ease-out;
-    }
-    
-    .side-card {
-        opacity: 0.4;
-        transform: scale(0.85);
-        filter: blur(2px);
-    }
-    
-    /* Hide side cards on mobile/small screens */
-    @media (max-width: 768px) {
-        .side-card-container {
-            display: none !important;
-        }
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    st.session_state.flashcard_motion = None
     
     # Determine animation class
-    if flipping:
-        animation_class = "carousel-flip"
-    elif going_forward:
-        animation_class = "carousel-slide-right"
+    if motion == 'flip' or flipping:
+        animation_class = "current-flip"
+    elif motion == 'next' or going_forward:
+        animation_class = "current-slide-next"
     else:
-        animation_class = "carousel-slide-left"
+        animation_class = "current-slide-prev"
     
     unique_key = f"{current_idx}_{st.session_state.card_side}"
     
@@ -210,11 +295,18 @@ def display_flashcard_deck():
         col_prev, col_current, col_next = st.columns([1, 3, 1])
         
         # Helper function to render a card
-        def render_card(card, is_current=False, side='Q'):
+        def render_card(card, is_current=False, side='Q', peek_side=None):
             import html as html_lib
             
             border_color = "#FFD700" if side == 'Q' else "#4CAF50"
-            card_class = animation_class if is_current else "side-card"
+            if is_current:
+                card_class = f"deck-card {animation_class}"
+            elif peek_side == 'left':
+                card_class = "deck-card side-peek-left"
+            elif peek_side == 'right':
+                card_class = "deck-card side-peek-right"
+            else:
+                card_class = "deck-card"
             font_size = '1.4rem' if is_current else '1rem'
             padding = '3rem' if is_current else '2rem'
             
@@ -272,34 +364,28 @@ def display_flashcard_deck():
                     """
             else:
                 # CONCEPTUAL MODE - Q/A Flip
-                if side == 'Q':
-                    label_text = "QUESTION"
-                    label_color = "#FFD700"
-                    content_text = question_escaped
-                else:
-                    label_text = "ANSWER"
-                    label_color = "#4CAF50"
-                    content_text = answer_escaped
-                
                 return f"""
-                <div class="{card_class}" style="
-                    background: linear-gradient(135deg, #1A1A1A 0%, #252525 100%);
-                    border-radius: 20px;
-                    border: 3px solid {border_color};
-                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-                    padding: {padding};
-                    min-height: 350px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                ">
-                    <p style="color: {label_color}; font-weight: bold; font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 2px;">
-                        {label_text}
-                    </p>
-                    <p style="color: #FFFFFF; font-size: {font_size}; line-height: 1.8; text-align: center;">
-                        {content_text}
-                    </p>
+                <div class="{card_class}">
+                    <div class="flip-shell">
+                        <div class="flip-inner {'is-flipped' if side == 'A' else ''}">
+                            <div class="flip-face front" style="padding: {padding}; align-items: center; text-align: center; min-height: 380px;">
+                                <div class="card-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 380px; text-align: center;">
+                                    <div class="card-title-badge">QUESTION</div>
+                                    <p style="color: #FFFFFF; font-size: {font_size}; line-height: 1.8; text-align: center; margin: 1rem 0 0 0;">
+                                        {question_escaped}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flip-face back" style="padding: {padding}; align-items: center; text-align: center; min-height: 380px;">
+                                <div class="card-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 380px; text-align: center;">
+                                    <div class="card-title-badge">ANSWER</div>
+                                    <p style="color: #D7E1EE; font-size: {font_size}; line-height: 1.8; text-align: center; margin: 1rem 0 0 0;">
+                                        {answer_escaped}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 """
         
@@ -307,7 +393,7 @@ def display_flashcard_deck():
         with col_prev:
             if num_cards > 1:
                 st.markdown('<div class="side-card-container">', unsafe_allow_html=True)
-                prev_card_html = render_card(data[prev_idx], is_current=False, side='Q')
+                prev_card_html = render_card(data[prev_idx], is_current=False, side='Q', peek_side='left')
                 st.markdown(prev_card_html, unsafe_allow_html=True)
                 st.markdown('</div>', unsafe_allow_html=True)
         
@@ -320,7 +406,7 @@ def display_flashcard_deck():
         with col_next:
             if num_cards > 1:
                 st.markdown('<div class="side-card-container">', unsafe_allow_html=True)
-                next_card_html = render_card(data[next_idx], is_current=False, side='Q')
+                next_card_html = render_card(data[next_idx], is_current=False, side='Q', peek_side='right')
                 st.markdown(next_card_html, unsafe_allow_html=True)
                 st.markdown('</div>', unsafe_allow_html=True)
     
@@ -373,6 +459,8 @@ def feature_generate_flashcards():
         st.session_state.card_side = 'Q'
     if 'flashcard_generating' not in st.session_state:
         st.session_state.flashcard_generating = False
+    if 'flashcard_motion' not in st.session_state:
+        st.session_state.flashcard_motion = None
 
     if st.session_state.get('flashcard_data'):
         display_flashcard_deck()
@@ -480,7 +568,7 @@ def feature_generate_flashcards():
                 )
             st.markdown("""
                         <style>
-/                       * Prevent editing in selectbox - make it select-only */
+/* Prevent editing in selectbox - make it select-only */
 div[data-baseweb="select"] input {
     pointer-events: none !important;
     cursor: pointer !important;
